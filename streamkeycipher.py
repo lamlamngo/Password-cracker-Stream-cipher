@@ -18,9 +18,6 @@ def encrypt(secret_key, iv, message):
 
     return encrypted
 
-for c in punc:
-    alist = l.split(c)
-
 def decrypt(secret_key, iv, encrypted):
     global chars
 
@@ -36,12 +33,12 @@ def decrypt(secret_key, iv, encrypted):
 
 def eavesdrop(iv, encrypted):
     decrypted = ""
+    with open('/usr/share/dict/words') as f:
+        lines = f.read().splitlines()
     while True:
         guess = secrets.token_bytes(32)
         decrypted = decrypt(guess,iv,encrypted)
         decrypted_list = decrypted.split(" ")
-        with open('/usr/share/dict/words') as f:
-            lines = f.read().splitlines()
 
         index = 0
         print(decrypted_list)
