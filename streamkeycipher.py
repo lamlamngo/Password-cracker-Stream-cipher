@@ -18,6 +18,8 @@ def encrypt(secret_key, iv, message):
 
     return encrypted
 
+for c in punc:
+    alist = l.split(c)
 
 def decrypt(secret_key, iv, encrypted):
     global chars
@@ -37,12 +39,24 @@ def eavesdrop(iv, encrypted):
     while True:
         guess = secrets.token_bytes(32)
         decrypted = decrypt(guess,iv,encrypted)
-        if decrypted == "meow":
+        decrypted_list = decrypted.split(" ")
+        with open('/usr/share/dict/words') as f:
+            lines = f.read().splitlines()
+
+        index = 0
+        print(decrypted_list)
+        while index < len(decrypted_list):
+            try:
+                lines.index(decrypted_list[index])
+            except:
+                index = 999999999999999
+            index = index + 1
+        if (index == len(decrypted_list)):
             break
     print("got it")
     print(decrypted)
 
 if __name__ == "__main__":
-    encrypted = encrypt(secret_key,iv,"Initialization")
-    print(encrypted)
-    print(decrypt(secret_key, iv, encrypted))
+    encrypted = encrypt(secret_key,iv,"cat")
+
+    eavesdrop(iv,encrypted)
