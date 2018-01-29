@@ -68,6 +68,14 @@ def eavesdrop(iv, encrypted):
         #         except:
         #             i = i + 2
 
+        index = 0
+
+        while index < len(decrypted_list):
+            for p in punc:
+                if p == "'":
+                    if elements.find(p) == len(decrypted_list[index]):
+                        elements = elements.replace
+
         for elements in decrypted_list:
             for p in punc:
                 if p == "'":
