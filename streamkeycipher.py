@@ -1,4 +1,4 @@
-import secrets, mersenne
+import secrets, optimized_mersenne
 import string
 
 secret_key = secrets.token_bytes(32)
@@ -9,8 +9,8 @@ def encrypt(secret_key, iv, message):
     global chars
 
     seed = (int.from_bytes(secret_key, 'big') ^ int.from_bytes(iv, 'big'))
-    mersenne.setSeed(seed)
-    shift = mersenne.nextInt()
+    optimized_mersenne.setSeed(seed)
+    shift = optimized_mersenne.nextInt()
 
     encrypted = ""
     for c in message:
@@ -23,8 +23,8 @@ def decrypt(secret_key, iv, encrypted):
     global chars
 
     seed = (int.from_bytes(secret_key, 'big') ^ int.from_bytes(iv, 'big'))
-    mersenne.setSeed(seed)
-    shift = mersenne.nextInt()
+    optimized_mersenne.setSeed(seed)
+    shift = optimized_mersenne.nextInt()
 
     decrypted = ""
     for c in encrypted:
@@ -32,7 +32,17 @@ def decrypt(secret_key, iv, encrypted):
 
     return decrypted
 
+def eavesdrop(iv, encrypted):
+    decrypted = ""
+    while True:
+        guess = secrets.token_bytes(32)
+        decrypted = decrypt(guess,iv,encrypted)
+        if decrypted == "meow":
+            break
+    print("got it")
+    print(decrypted)
+
 if __name__ == "__main__":
-    encrypted = encrypt(secret_key,iv,"meow")
-    print (encrypted)
-    print(decrypt(secret_key,iv,encrypted))
+    encrypted = encrypt(secret_key,iv,"Initialization")
+    print(encrypted)
+    print(decrypt(secret_key, iv, encrypted))
