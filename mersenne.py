@@ -10,6 +10,7 @@ m = list(range(0,N))
 mi = N
 
 def setSeed(seed):
+    global m, mi
     m[0] = seed & 0xffffff
     index = 1
     while (index < len(m)):
@@ -18,6 +19,7 @@ def setSeed(seed):
     mi = N
 
 def nextInt():
+    global m, mi, N, UPPER, LOWER, M, A
     if (mi >= N):
         k = 0
         while k < N:
