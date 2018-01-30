@@ -13,6 +13,7 @@ for i in range(10):
 print("Another seed less than 2^32")
 print("Printing 10 different pseudo random numbers, values should be different")
 b = secrets.randbelow(10000)
+mersenne.setSeed(b)
 for i in range(10):
     print("%d: %d" % (i,mersenne.nextInt()))
 print("Back to the original seed")
@@ -20,23 +21,40 @@ print("Printing 10 different pseudo random numbers, values should be the same as
 mersenne.setSeed(a)
 for i in range(10):
     print("%d: %d" % (i,mersenne.nextInt()))
-
+print ("---------------------------------------------------------------------")
 print("Second Part: A demonstration of the behavior of PRG, using the optimized version")
 print("The behavior should be the same, using the same seed as the first part")
 print("\n")
-a = secrets.randbelow(2**32)
 print("First, a seed of value less than 2^32")
-mersenne.setSeed(a)
+optimized_mersenne.setSeed(a)
 print("Printing 10 different pseudo random numbers")
 for i in range(10):
-    print("%d: %d" % (i,mersenne.nextInt()))
+    print("%d: %d" % (i,optimized_mersenne.nextInt()))
 print("Another seed less than 2^32")
 print("Printing 10 different pseudo random numbers, values should be different")
-mersenne.setSeed(secrets.randbelow(10000))
+optimized_mersenne.setSeed(b)
 for i in range(10):
-    print("%d: %d" % (i,mersenne.nextInt()))
+    print("%d: %d" % (i,optimized_mersenne.nextInt()))
 print("Back to the original seed")
 print("Printing 10 different pseudo random numbers, values should be the same as the first one")
-mersenne.setSeed(a)
+optimized_mersenne.setSeed(a)
 for i in range(10):
-    print("%d: %d" % (i,mersenne.nextInt()))
+    print("%d: %d" % (i,optimized_mersenne.nextInt()))
+
+print ("---------------------------------------------------------------------")
+print ("Third Part: Testing encrypting")
+print ("Encrypting 'My name is Lam Ngo'")
+encrypted_1 = streamkeycipher.encrypt(streamkeycipher.secret_key,streamkeycipher.iv,"My name is Lam Ngo", streamkeycipher.chars)
+print(encrypted_1)
+
+print("\n")
+print ("Encrypting 'I am a student of Union College and I go to class early ever morning, so the Professor doesn't hate me'")
+encrypted_2 = streamkeycipher.encrypt(streamkeycipher.secret_key,streamkeycipher.iv,"I am a student of Union College and I go to class early ever morning, so the Professor doesn't hate me", streamkeycipher.chars)
+print(encrypted_2)
+
+print("\n")
+print ("Encrypting 'The Shape of Water'")
+encrypted_3 = streamkeycipher.encrypt(streamkeycipher.secret_key,streamkeycipher.iv,"The Shape of Water", streamkeycipher.chars)
+print(encrypted_3)
+print("\n")
+print ("---------------------------------------------------------------------")
