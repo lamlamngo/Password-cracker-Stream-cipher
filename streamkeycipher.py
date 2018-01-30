@@ -7,8 +7,8 @@ import string, singularize, os, sys, time
 #generate secret key and a random Initialization vector using the secrets
 #module. For cryptography use, 32 bytes (256 bits) are used, but I put 16 to
 #increase the run time of the function eavesdrop
-secret_key = secrets.token_bytes(4)
-iv = secrets.token_bytes(4)
+secret_key = secrets.token_bytes(32)
+iv = secrets.token_bytes(32)
 
 #Allowed character
 chars = string.ascii_letters + string.digits + string.punctuation + ' '
@@ -52,7 +52,7 @@ def eavesdrop_2(iv, encrypted,chars):
         lines = f.read().splitlines()
     i = 0
     sk = 2**256 - 1
-    while sk > 0 and (time.time() - start < 60):
+    while sk > 0 and (time.time() - start < 600):
         guess = sk.to_bytes(32,sys.byteorder)
         original_decrypted = decrypt(guess,iv,encrypted,chars).lower()
         try:
@@ -152,7 +152,3 @@ def eavesdrop(iv, encrypted,chars):
     print ('timed out')
     print ("can't decrypt the message")
     return None
-
-if __name__ == "__main__":
-    encrypted = encrypt(secret_key,iv,"abandon",chars)
-    eavesdrop(iv,encrypted,chars)
