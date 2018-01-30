@@ -1,3 +1,4 @@
+#Try to optimize by having it compute on demand in nextInt.
 import random
 
 #Global Initialization

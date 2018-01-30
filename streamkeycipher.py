@@ -7,8 +7,8 @@ import string, singularize, os, sys, time
 #generate secret key and a random Initialization vector using the secrets
 #module. For cryptography use, 32 bytes (256 bits) are used, but I put 16 to
 #increase the run time of the function eavesdrop
-secret_key = secrets.token_bytes(16)
-iv = secrets.token_bytes(16)
+secret_key = secrets.token_bytes(4)
+iv = secrets.token_bytes(4)
 
 #Allowed character
 chars = string.ascii_letters + string.digits + string.punctuation + ' '
@@ -45,14 +45,14 @@ def decrypt(secret_key, iv, encrypted, chars):
 #2^256 different key until we find a key that can gives us a somewhat convincing
 #message.
 #Time out after 5 minutes.
-def test(iv, encrypted):
+def test(iv, encrypted,chars):
     with open('/usr/share/dict/words') as f:
         lines = f.read().splitlines()
     i = 0
-    sk = 2**128 - 1
+    sk = 2**32 - 1
     while sk > 0:
-        guess = sk.to_bytes(16,sys.byteorder)
-        original_decrypted = decrypt(guess,iv,encrypted).lower()
+        guess = sk.to_bytes(4,sys.byteorder)
+        original_decrypted = decrypt(guess,iv,encrypted,chars).lower()
         try:
             lines.index(original_decrypted)
             print(original_decrypted)
@@ -68,9 +68,9 @@ def eavesdrop(iv, encrypted,chars):
     with open('shorthands') as f:
         shorthands = f.read().splitlines()
 
-    sk = 2**128 - 1
+    sk = 2**32 - 1
     while sk > 0:
-        guess = sk.to_bytes(16,sys.byteorder)
+        guess = sk.to_bytes(4,sys.byteorder)
         original_decrypted = decrypt(guess,iv,encrypted,chars).strip().lower()
         decrypted = original_decrypted
         print(decrypted)
@@ -130,5 +130,5 @@ def eavesdrop(iv, encrypted,chars):
     print("time elapsed: ", end-start)
 
 if __name__ == "__main__":
-    encrypted = encrypt(secret_key,iv,"I am a",chars)
+    encrypted = encrypt(secret_key,iv,"she is a student",chars)
     eavesdrop(iv,encrypted,chars)

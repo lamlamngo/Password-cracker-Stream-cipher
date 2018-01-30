@@ -1,3 +1,5 @@
+#Just followed the pseudo-code on Nexus.
+#Written by Lam Ngo
 import random
 
 #Global Initialization
