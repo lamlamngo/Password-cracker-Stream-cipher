@@ -6,7 +6,7 @@ M = 397
 A = 0x9908bd0df
 UPPER = 0x80000000
 LOWER = 0x7fffffff
-m = list(range(0,N))
+m = [0 for i in range(N)]
 mi = N
 
 def setSeed(seed):
