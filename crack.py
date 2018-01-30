@@ -130,7 +130,7 @@ def dictionary_attack(pwd, salt):
 
 #compare a plain text guess to the hashed password
 def passwordcompare(guess,pw,salt):
-    guess = hashlib.pbkdf2_hmac('sha256', guess.encode(), salt, 1)
+    guess = hashlib.pbkdf2_hmac('sha256', guess.encode(), salt, 10000)
     return hmac.compare_digest(guess,pw)
 
 # Check arguments

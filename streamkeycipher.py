@@ -7,8 +7,8 @@ import string, singularize, os, sys, time
 #generate secret key and a random Initialization vector using the secrets
 #module. For cryptography use, 32 bytes (256 bits) are used, but I put 16 to
 #increase the run time of the function eavesdrop
-secret_key = secrets.token_bytes(32)
-iv = secrets.token_bytes(32)
+secret_key = secrets.token_bytes(4)
+iv = secrets.token_bytes(4)
 
 #Allowed character
 chars = string.ascii_letters + string.digits + string.punctuation + ' '
@@ -44,14 +44,16 @@ def decrypt(secret_key, iv, encrypted, chars):
 #Eavesdrop implementation 1: Since the key length is 32 bytes, we can try all
 #2^256 different key until we find a key that can gives us a somewhat convincing
 #message.
+#work better if the message is just one word
 #Time out after 5 minutes.
-def test(iv, encrypted,chars):
+def eavesdrop_2(iv, encrypted,chars):
+    start = time.time()
     with open('/usr/share/dict/words') as f:
         lines = f.read().splitlines()
     i = 0
-    sk = 2**32 - 1
-    while sk > 0:
-        guess = sk.to_bytes(4,sys.byteorder)
+    sk = 2**256 - 1
+    while sk > 0 and (time.time() - start < 60):
+        guess = sk.to_bytes(32,sys.byteorder)
         original_decrypted = decrypt(guess,iv,encrypted,chars).lower()
         try:
             lines.index(original_decrypted)
@@ -59,7 +61,17 @@ def test(iv, encrypted,chars):
             return
         except:
             sk = sk - 1
+    print ('timed out')
+    print ("can't decrypt the message")
+    return None
 
+#eavesdrop implementation 2:
+#randomly choose a number from 0 to 2**256 to guess the secret key
+#decrypt the message, change from any short hand (like don't) to do not.
+#singularize a word if it is plural to check in the dictionary
+#if all words in a sentence is in the dictionary then return the message
+#Times out after 10 minues (Configureable) as that is the case that it can not
+#find anything satisfying
 def eavesdrop(iv, encrypted,chars):
     global punctuation
     start = time.time()
@@ -68,12 +80,18 @@ def eavesdrop(iv, encrypted,chars):
     with open('shorthands') as f:
         shorthands = f.read().splitlines()
 
-    sk = 2**32 - 1
-    while sk > 0:
-        guess = sk.to_bytes(4,sys.byteorder)
+    tried = []
+    length = 0
+    while length < 2**256 and time.time() - start < 600:
+        sk = secrets.randbelow(2**256)
+        while tried.count(sk) != 0:
+            sk = secrets.randbelow(2**256)
+        tried.append(sk)
+        length = length + 1
+
+        guess = sk.to_bytes(32,sys.byteorder)
         original_decrypted = decrypt(guess,iv,encrypted,chars).strip().lower()
         decrypted = original_decrypted
-        print(decrypted)
 
         #replace things like don't to do not, which will be in the dictionary
         i = 0
@@ -86,7 +104,10 @@ def eavesdrop(iv, encrypted,chars):
 
         #split the string into elements separated by the space. like a normal
         #english sentence
-        decrypted_list = decrypted.split(" ")
+        if len(decrypted) < 5: #unlikely to be two sentence:
+            decrypted_list = [decrypted]
+        else:
+            decrypted_list = decrypted.split(" ")
         index = 0
 
         # for m in range(len(decrypted_list)):
@@ -98,8 +119,6 @@ def eavesdrop(iv, encrypted,chars):
         #                 decrypted_list[m] = decrypted_list[m].replace("'s'","")
         #         else:
         #             decrypted_list[m] = decrypted_list[m].replace(p,"")
-
-
         #check if the passphrase makes sense
         while index < len(decrypted_list):
             if not decrypted_list[index].isnumeric():
@@ -108,27 +127,32 @@ def eavesdrop(iv, encrypted,chars):
                 singular = singularize.convert(decrypted_list[index])
                 if singular:
                     try:
+                        #check if the singular is in the dictionary
                         lines.index(singular.lower())
                     except:
                         try:
+                            #case the word was not actually plural
                             lines.index(decrypted_list[index])
                         except:
                             index = 999999999999999
-                            end = time.time()
                 else:
                     try:
+                        #word is already singular
                         lines.index(decrypted_list[index])
                     except:
                         index = 999999999999999
-                        end = time.time()
             index = index + 1
         if (index == len(decrypted_list)):
-            break
-        sk = sk - 1
-    print("got it")
-    print(original_decrypted)
-    print("time elapsed: ", end-start)
+            end = time.time()
+            print("\n")
+            print("I believe the message is: ")
+            print(original_decrypted)
+            print("time elapsed: ", end-start)
+            return
+    print ('timed out')
+    print ("can't decrypt the message")
+    return None
 
 if __name__ == "__main__":
-    encrypted = encrypt(secret_key,iv,"I am a student of Union College and I go to class early ever morning, so the Professor doesn't hate me",chars)
-    print(encrypted)
+    encrypted = encrypt(secret_key,iv,"abandon",chars)
+    eavesdrop(iv,encrypted,chars)
