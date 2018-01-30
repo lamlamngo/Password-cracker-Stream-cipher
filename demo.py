@@ -2,7 +2,7 @@ import streamkeycipher, secrets, mersenne,optimized_mersenne
 
 print ("Testing of Problem 2")
 print ("---------------------------------------------------------------------")
-print("First Part: A demonstration of the behavior of PRG, using the non-optimized version")
+print("Part 1: A demonstration of the behavior of PRG, using the non-optimized version")
 print("\n")
 a = secrets.randbelow(2**32)
 print("First, a seed of value less than 2^32")
@@ -22,7 +22,7 @@ mersenne.setSeed(a)
 for i in range(10):
     print("%d: %d" % (i,mersenne.nextInt()))
 print ("---------------------------------------------------------------------")
-print("Second Part: A demonstration of the behavior of PRG, using the optimized version")
+print("Part 2: A demonstration of the behavior of PRG, using the optimized version")
 print("The behavior should be the same, using the same seed as the first part")
 print("\n")
 print("First, a seed of value less than 2^32")
@@ -42,7 +42,7 @@ for i in range(10):
     print("%d: %d" % (i,optimized_mersenne.nextInt()))
 
 print ("---------------------------------------------------------------------")
-print ("Third Part: Testing encrypting")
+print ("Part 3: Testing encrypting")
 print ("Encrypting 'My name is Lam Ngo'")
 encrypted_1 = streamkeycipher.encrypt(streamkeycipher.secret_key,streamkeycipher.iv,"My name is Lam Ngo", streamkeycipher.chars)
 print(encrypted_1)
@@ -58,3 +58,14 @@ encrypted_3 = streamkeycipher.encrypt(streamkeycipher.secret_key,streamkeycipher
 print(encrypted_3)
 print("\n")
 print ("---------------------------------------------------------------------")
+print("Part 4: Testing decrypting")
+print ("Decrypting 'My name is Lam Ngo' from above")
+print (streamkeycipher.decrypt(streamkeycipher.secret_key,streamkeycipher.iv,encrypted_1, streamkeycipher.chars))
+
+print("\n")
+print ("Decrypting 'I am a student of Union College and I go to class early ever morning, so the Professor doesn't hate me' from above")
+print (streamkeycipher.decrypt(streamkeycipher.secret_key,streamkeycipher.iv,encrypted_2, streamkeycipher.chars))
+
+print("\n")
+print ("Decrypting 'The Shape of Water' from above")
+print (streamkeycipher.decrypt(streamkeycipher.secret_key,streamkeycipher.iv,encrypted_3, streamkeycipher.chars))
