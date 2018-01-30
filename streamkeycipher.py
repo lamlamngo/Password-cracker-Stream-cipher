@@ -2,7 +2,7 @@
 #For CSC-483
 #Professor Matthew Anderson
 import secrets, optimized_mersenne, mersenne
-import string, fuckthisshit, os, sys, time
+import string, singularize, os, sys, time
 
 #generate secret key and a random Initialization vector using the secrets
 #module. For cryptography use, 32 bytes (256 bits) are used, but I put 16 to
@@ -105,7 +105,7 @@ def eavesdrop(iv, encrypted,chars):
             if not decrypted_list[index].isnumeric():
                 #try to convert plurals to singular
                 #Read the file Singularize for implementation
-                singular = fuckthisshit.convert(decrypted_list[index])
+                singular = singularize.convert(decrypted_list[index])
                 if singular:
                     try:
                         lines.index(singular.lower())
@@ -130,5 +130,5 @@ def eavesdrop(iv, encrypted,chars):
     print("time elapsed: ", end-start)
 
 if __name__ == "__main__":
-    encrypted = encrypt(secret_key,iv,"cat",chars)
+    encrypted = encrypt(secret_key,iv,"I am a",chars)
     eavesdrop(iv,encrypted,chars)
