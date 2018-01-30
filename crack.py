@@ -19,23 +19,20 @@ def brute_force_with_knowledge(pwd, salt, hint):
                 print ("number of password checked: ", attempt)
                 print ("time elapsed: ", end-start)
                 return
+
     prev = [i for i in characters]
-    count = 1
-    while count < k:
+    for count in range(1,4):
         temp = []
         for x in prev:
             for i in characters:
                 temp.append(x+i)
-        count = count + 1
         prev = temp
 
     for array in prev:
         attempt = attempt + 1
-        i = 0
         aha = hint
-        while i < k:
+        for i in range(0,k):
             aha = aha.replace('*',array[i],1)
-            i = i + 1
         if passwordcompare(aha,pwd,salt):
             end = time.time()
             print ("password found: ", aha)
@@ -91,9 +88,9 @@ def dictionary_attack(pwd, salt):
     with open('/usr/share/dict/words') as f:
         lines = f.read().splitlines()
 
-    count = 0
+    attempt = 0
     for word in lines:
-        count = count + 1
+        attempt = attempt + 1
         if passwordcompare(word,pwd,salt):
             end = time.time()
             print ("password found: ", word)
