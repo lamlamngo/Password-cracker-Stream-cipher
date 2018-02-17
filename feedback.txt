@@ -1,0 +1,50 @@
+CSC 483 - Project  - Feedback
+
+Name: Lam 
+
+
+Problem 1                                            55/55 pts
+
+ - Program accepts commandline args                           5/ 5 pts
+ - Program reads file format                                  5/ 5 pts
+ - Brute force                                               15/15 pts
+   + Cracks simple password in 1 minute:   g                          6/ 6 pts
+   + Cracks moderate password in 1 minute: !#                         6/ 6 pts
+   + Doesn't store all possible passwords                             3/ 3 pts
+ - Dictionary attack                                         15/15 pts
+   + Cracks password in dictionary: Acropolis                        12/12 pts
+   + Handles password not in dictionary                               3/ 3 pts      
+ - Brute force with prior knowledge                          15/15 pts
+   + Cracks password with in 1 minute with hint: hello w*rld          6/ 6 pts
+   + Cracks password with in 1 minute with hint: **                   6/ 6 pts
+   + Cracks password with asterisks:  *                               3/ 3 pts
+ - Brute force with regex                                     0/10 pts Extra Credit
+ 
+ - Comments:
+   - Only perfect score in class on this part!
+
+Problem 2                                            50/45 pts
+
+ - Part 1 - Mersenne Twister                                   10/10 pts
+   + Correct                                                            8/ 8 pts
+   + Optimized                                                          2/ 2 pts
+
+ - Part 2 - Stream Cipher                                      30/25 pts
+   + encrypt                                                            7/ 7 pts
+   + decrypt                                                            8/ 8 pts
+   + eavesdrop                                                         15/10 pts
+     - More elaborate implementation than I was looking for! +5
+     - It's easier to identify longer messages, rather than several
+       character words, because more of the symbols that than
+       attempted decryption finds won't be valid.
+   
+
+ - Part 3 - Demo                                               10/10 pts
+
+
+- General Comments:
+  + Awesome work!
+
+
+
+Score:                105/100
